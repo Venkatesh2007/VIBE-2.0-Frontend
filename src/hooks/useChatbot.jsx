@@ -1,115 +1,3 @@
-// import { generateUUID } from "three/src/math/MathUtils.js";
-// import { Lipsync } from "wawa-lipsync";
-// import { create } from "zustand";
-
-// const useChatbot = create((set, get) => ({
-//   loaded: false,
-//   setAppLoaded: () => set({ loaded: true }),
-//   audioPlayer: null,
-//   lipsyncManager: null,
-//   setupAudioPlayer: () => {
-//     if (typeof Audio === "undefined") {
-//       return; // Audio API is not supported in this environment (SSR)
-//     }
-//     const audioPlayer = new Audio();
-//     audioPlayer.crossOrigin = "anonymous"; // Ensure CORS is handled
-//     audioPlayer.preload = "auto"; // Preload audio for better performance
-
-//     const lipsyncManager = new Lipsync({});
-//     let lipsyncManagerInitialized = false;
-
-//     audioPlayer.onerror = (error) => {
-//       console.error("Audio playback error:", error);
-//     };
-
-//     audioPlayer.onplaying = () => {
-//       if (!lipsyncManagerInitialized) {
-//         lipsyncManager.connectAudio(audioPlayer);
-//         lipsyncManagerInitialized = true;
-//       }
-//       set({ status: "playing" });
-//     };
-//     audioPlayer.onended = () => {
-//       set({ status: "Idle" });
-//     };
-//     set({ audioPlayer, lipsyncManager });
-//   },
-
-//   playAudio: (url) => {
-//     const audioPlayer = get().audioPlayer;
-//     if (!audioPlayer) {
-//       console.warn("Audio player is not set up yet.");
-//       return;
-//     }
-//     audioPlayer.src = url;
-//     audioPlayer.play();
-//   },
-
-//   status: "Idle",
-//   messages: [],
-//   sessionId: generateUUID(),
-
-//   sendMessage: async (message) => {
-//     set((state) => ({
-//       messages: [...state.messages, { text: message, sender: "user" }],
-//       status: "loading",
-//     }));
-
-//     try {
-//       const data = await fetch(
-//         `http://localhost:3000/chat?message=${encodeURIComponent(message)}&sessionId=${encodeURIComponent(get().sessionId)}`
-//       );
-
-//       const result = await data.json();
-
-//       // 1. Parse the stringified "output" field
-//       const parsedOutput = JSON.parse(result.output);
-//       const botMessages = parsedOutput.messages; // This is the array of {text, facialExpression, animation}
-
-//       // 2. Process each message segment
-//       for (const msg of botMessages) {
-//         // Add message to chat UI
-//         set((state) => ({
-//           messages: [...state.messages, {
-//             text: msg.text,
-//             sender: "bot",
-//             facialExpression: msg.facialExpression,
-//             animation: msg.animation
-//           }],
-//         }));
-
-//         // 3. Play audio and wait for it to finish before moving to the next segment
-//         // (Optional: If you want them to speak one after another)
-//         await new Promise((resolve) => {
-//           const audioUrl = `http://localhost:3000/tts?message=${encodeURIComponent(msg.text)}`;
-//           const player = get().audioPlayer;
-
-//           player.src = audioUrl;
-//           player.onended = resolve; // Move to next message when this audio finishes
-//           player.play();
-//         });
-//       }
-
-//       set({ status: "Idle" });
-//       const player = get().audioPlayer;
-//       if (player) {
-//         player.onended = () => {
-//           set({ status: "Idle" });
-//         };
-//       }
-
-//     } catch (error) {
-//       console.error("Error processing message:", error);
-//       set({ status: "Idle" });
-//     }
-//   },
-// }));
-
-// useChatbot.getState().setupAudioPlayer();
-
-// export default useChatbot;
-
-
 import { generateUUID } from "three/src/math/MathUtils.js";
 import { Lipsync } from "wawa-lipsync";
 import { create } from "zustand";
@@ -190,7 +78,7 @@ const useChatbot = create((set, get) => ({
 
     try {
       const data = await fetch(
-        `http://localhost:3000/chat?message=${encodeURIComponent(fullMessage)}&sessionId=${encodeURIComponent(get().sessionId)}`
+        `https://vibe-2-0-backend.onrender.com/chat?message=${encodeURIComponent(fullMessage)}&sessionId=${encodeURIComponent(get().sessionId)}`
       );
 
       const result = await data.json();
@@ -216,7 +104,7 @@ const useChatbot = create((set, get) => ({
         }));
 
         await new Promise((resolve) => {
-          const audioUrl = `http://localhost:3000/tts?message=${encodeURIComponent(msg.text)}`;
+          const audioUrl = `https://vibe-2-0-backend.onrender.com/tts?message=${encodeURIComponent(msg.text)}`;
           const player = get().audioPlayer;
           player.src = audioUrl;
           player.onended = resolve;
