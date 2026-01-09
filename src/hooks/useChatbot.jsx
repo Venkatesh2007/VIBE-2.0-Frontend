@@ -78,7 +78,7 @@ const useChatbot = create((set, get) => ({
 
     try {
       const data = await fetch(
-        `https://vibe-2-0-backend.onrender.com/chat?message=${encodeURIComponent(fullMessage)}&sessionId=${encodeURIComponent(get().sessionId)}`
+        `https://vibe-2-0-backend.vercel.app//chat?message=${encodeURIComponent(fullMessage)}&sessionId=${encodeURIComponent(get().sessionId)}`
       );
 
       const result = await data.json();
@@ -104,7 +104,7 @@ const useChatbot = create((set, get) => ({
         }));
 
         await new Promise((resolve) => {
-          const audioUrl = `https://vibe-2-0-backend.onrender.com/tts?message=${encodeURIComponent(msg.text)}`;
+          const audioUrl = `https://vibe-2-0-backend.vercel.app//tts?message=${encodeURIComponent(msg.text)}`;
           const player = get().audioPlayer;
           player.src = audioUrl;
           player.onended = resolve;
